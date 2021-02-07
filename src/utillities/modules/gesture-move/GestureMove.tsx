@@ -1,10 +1,21 @@
 import React from 'react';
-import {SafeAreaView, View, StyleSheet} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
+import {PanGestureHandler} from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
+import {usePanGestureHandler, withOffset} from 'react-native-redash';
 
 const GestureMove = () => {
+  const {gestureHandler, translation, state} = usePanGestureHandler();
+  const translateX = withOffset(translation.x, state);
+  const translateY = withOffset(translation.y, state);
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.ball} />
+      <PanGestureHandler {...gestureHandler}>
+        <Animated.View
+          style={[styles.ball, {transform: [{translateX}, {translateY}]}]}
+        />
+      </PanGestureHandler>
     </SafeAreaView>
   );
 };
@@ -13,12 +24,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   ball: {
     backgroundColor: '#89CFF0',
-    width: 200,
-    height: 200,
-    borderRadius: 200 / 2,
+    width: 100,
+    height: 100,
+    borderRadius: 100 / 2,
     alignSelf: 'center',
   },
 });
